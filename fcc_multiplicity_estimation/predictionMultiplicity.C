@@ -25,6 +25,7 @@ void predictionMultiplicity(){
   dummy->SetStats(0);
   dummy->GetYaxis()->SetLabelSize(0.04);
   dummy->GetYaxis()->SetLabelSize(0.04);
+  dummy->GetYaxis()->SetTitleOffset(1.1);
   dummy->Draw("same");
   gPad->SetLogy();
   legend = new TLegend(0.58, 0.6, 0.91, 0.92);
@@ -120,6 +121,7 @@ void predictionMultiplicity(){
   hpPb5TeV->Draw("same");
   //hpPb5TeV->Draw("same");
   graphALICE7TeV->Draw("pesame");
+  mycanvas->SaveAs("multiplicity_prediction.pdf");
   
 }
 
