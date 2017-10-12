@@ -19,8 +19,8 @@ void predictionMultiplicity(){
   gPad->SetRightMargin(0.05);
   gPad->SetTopMargin(0.10);
   
-  dummy = new TH2F("dummy", ";N_{ch};P(N_{ch})", 100, 0.1, 22000, 100, 1e-7, 50.);
-  dummy->GetXaxis()->SetNdivisions(8,true);
+  dummy = new TH2F("dummy", ";N_{ch};P(N_{ch})", 100, 0.1, 18000, 100, 1e-7, 50.);
+  dummy->GetXaxis()->SetNdivisions(6,true);
   dummy->GetYaxis()->SetNdivisions(8,true);
   dummy->SetStats(0);
   dummy->GetYaxis()->SetLabelSize(0.04);
@@ -68,6 +68,7 @@ void predictionMultiplicity(){
   //hPbPb5TeV->SetMarkerStyle(25);
   hPbPb5TeV->SetLineWidth(2);
   hPbPb5TeV->Draw("same");  
+    
   
   TLegend *legendSigma=new TLegend(0.233871,0.6419492,0.5322581,0.815678,"");
   legendSigma->SetFillColor(0);
@@ -119,23 +120,35 @@ void predictionMultiplicity(){
   hemptyzoomhnTrkvshiBin->GetYaxis()->SetLabelSize(0.12);
   hemptyzoomhnTrkvshiBin->Draw();
   hpPb5TeV->Draw("same");
-  //hpPb5TeV->Draw("same");
+  hPbPb5TeV->Draw("same");
+  hXeXe5TeV->Draw("same");
   graphALICE7TeV->Draw("pesame");
+/*
+
+  TLine *line = new TLine(800,0.000001,800,1);
+  line->SetLineWidth(4);
+  line->SetLineColor(1);
+ line->SetLineStyle(2);
+  line->Draw();
+
+  */
+
   mycanvas->SaveAs("multiplicity_prediction.pdf");
   
 }
 
 TH1F* fillParticleDistribution(TString filename){
-
+  n = new TF1("n", "[0]*x**(2*[1])", 25, 100000);
+  n->SetParameters(1.636, 0.1436);
   func = GetNBDLog("nbd_5");
-  func->SetParameters(1, 20.8, k->Eval(5000));
+  func->SetParameters(1, n->Eval(5000), k->Eval(5000));
   func->SetRange(0, 170);
 
   TFile* fin = TFile::Open(filename.Data()); 
   TTree* mytree = (TTree*)fin->Get("nt");
   //TTree* mytree = (TTree*)fin->Get("HiTree");
   
-  TH1F*histo=new TH1F("histo","histo",500,0,30000);
+  TH1F*histo=new TH1F("histo","histo",500,0,20000);
   double f_factor_5TeV=0.8;
   int nparticle;
   float Npart, Ncoll;
