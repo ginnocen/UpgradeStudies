@@ -365,6 +365,8 @@ void LR()
   Float_t reduceError[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
   Int_t markers[] = { 20, 21, 22, 23, 24, 25, 25, 26, 27, 28, 30 };
 
+   TFile*fout=new TFile("outputALICE7TeV.root","recreate");
+
   for (Int_t i=0; i<count; i++)
   {
     if (i == 1 || i == 3)
@@ -385,9 +387,17 @@ void LR()
 //     graph->SetMarkerSize(0.8);
     
     graph->Clone()->Draw("PSAME");
+    
 
+    if (i==5) { 
+      graph->SetName("graphALICE7TeV");
+      graph->Write();
+   }
     legend->AddEntry(graph, names[i], "P");
+
   }
+  fout->Write();
+
   
   func = GetNBDLog("nbd_0.2");
   func->SetParameters(1, 8, k->Eval(200));
