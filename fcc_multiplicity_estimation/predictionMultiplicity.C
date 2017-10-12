@@ -19,7 +19,7 @@ void predictionMultiplicity(){
   gPad->SetTopMargin(0.05);
   
   
-  dummy = new TH2F("dummy", ";N_{ch};P(N_{ch})", 100, 0, 100000, 100, 1e-7, 0.1);
+  dummy = new TH2F("dummy", ";N_{ch};P(N_{ch})", 100, 0.1, 30000, 100, 1e-7, 50.);
   dummy->SetStats(0);
   dummy->GetYaxis()->SetTitleOffset(1.2);
   dummy->Draw();
@@ -29,11 +29,27 @@ void predictionMultiplicity(){
   legend->SetLineColor(0);
   
   
-  
-  TH1F*hPbPb5TeV=(TH1F*)fillParticleDistribution("skimPbPb.root");
-  //TH1F*hpPb5TeV=(TH1F*)fillParticleDistribution("TGlauberMC-2.4/glau_ppb_smeared_ntuple.root");
-  //TH1F*hXeXe5TeV=(TH1F*)fillParticleDistribution("TGlauberMC-2.4/glau_xexe_smeared_ntuple.root");
+  TH1F*hpPb5TeV=(TH1F*)fillParticleDistribution("TGlauberMC-2.4/glau_ppb_smeared_ntuple.root");
+  TH1F*hPbPb5TeV=(TH1F*)fillParticleDistribution("TGlauberMC-2.4/glau_pbpb_smeared_ntuple.root");
+  TH1F*hXeXe5TeV=(TH1F*)fillParticleDistribution("TGlauberMC-2.4/glau_xexe_smeared_ntuple.root");
+  hpPb5TeV->Draw("same");
   hPbPb5TeV->Draw("same");
+  hXeXe5TeV->Draw("same");
+   
+
+  TFile*fout=new TFile("outputALICE7TeV.root");
+  TGraphErrors*graphALICE7TeV=(TGraphErrors*)fout->Get("graphALICE7TeV");
+  graphALICE7TeV->Draw("same");
+  
+  func = GetNBDLog("nbd_7");
+  func->SetParameters(1, 20.8, k->Eval(7000));
+  func->SetRange(0.3 * 151, 170);
+  func->SetLineColor(2);
+// 	func->SetLineStyle(3);
+  func->Draw("SAME");
+
+
+  
 }
 
 TH1F* fillParticleDistribution(TString filename){
@@ -43,10 +59,10 @@ TH1F* fillParticleDistribution(TString filename){
   func->SetRange(0, 170);
 
   TFile* fin = TFile::Open(filename.Data()); 
-  //TTree* mytree = (TTree*)fin->Get("nt");
-  TTree* mytree = (TTree*)fin->Get("HiTree");
+  TTree* mytree = (TTree*)fin->Get("nt");
+  //TTree* mytree = (TTree*)fin->Get("HiTree");
   
-  TH1F*histo=new TH1F("histo","histo",20000,0,100000);
+  TH1F*histo=new TH1F("histo","histo",3000,0,30000);
   double f_factor_5TeV=0.8;
   int nparticle;
   float Npart, Ncoll;
